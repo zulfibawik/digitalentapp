@@ -1,0 +1,67 @@
+# docker-compose.yml untuk digitalentappython
+# Stack minimal: Python (terminal) + MySQL
+# Sesuai CLAUDE.md: cukup Python dan MySQL untuk starter
+
+services:
+  # Service Python untuk terminal interaktif
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: digitalentappython_python
+    image: digitalentappython/python:latest
+    restart: unless-stopped
+    volumes:
+      # Mount source code agar perubahan langsung terbaca tanpa rebuild
+      - ./app:/workspace/app:rw
+      - ./sql:/workspace/sql:rw
+    environment:
+      # Konfigurasi koneksi MySQL (sesuai .env.example)
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=digitalenta
+      - DB_PASSWORD=digitalenta_pass
+      - DB_NAME=digitalenta_db
+    networks:
+      - digitalenta_net
+    depends_on:
+      db:
+        condition: service_healthy
+    # Container tetap hidup untuk akses via docker exec
+    command: tail -f /dev/null
+
+  # Service MySQL 8.4
+  db:
+    image: mysql:8.4
+    container_name: digitalentappython_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_rahasia
+      MYSQL_DATABASE: digitalenta_db
+      MYSQL_USER: digitalenta
+      MYSQL_PASSWORD: digitalenta_pass
+    ports:
+      # Host port 3311 -> container 3306 (aman, tidak bentrok dengan stack lain)
+      - "127.0.0.1:3311:3306"
+    volumes:
+      # Persistensi data MySQL
+      - db_data:/var/lib/mysql
+      # Auto-init database dari script SQL saat pertama kali jalan
+      - ./sql/init_statistik.sql:/docker-entrypoint-initdb.d/init_statistik.sql:ro
+    networks:
+      - digitalenta_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password_rahasia"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+# Volume untuk persistensi data MySQL
+volumes:
+  db_data:
+    driver: local
+
+# Network khusus proyek ini
+networks:
+  digitalenta_net:
+    driver: bridge

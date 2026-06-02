@@ -1,0 +1,3 @@
+# Dependency Python untuk digitalentappython
+# Sesuai CLAUDE.md: cukup Python dan MySQL untuk starter
+mysql-connector-python==9.0.0
