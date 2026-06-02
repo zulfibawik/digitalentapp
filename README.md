@@ -2,9 +2,9 @@
 
 Latihan proyek Python dan Data Science.
 
-Sesuai `CLAUDE.md`, stack ini adalah **Python 3 + MySQL** di dalam Docker Compose. Fokus utama
-fitur adalah **membuka terminal di dalam container Docker** dan melakukan operasi data
-pada tabel `statistik`.
+Stack ini menggunakan **Python 3 + MySQL** di dalam Docker Compose. Fokus utama
+fitur adalah menjalankan aplikasi dari terminal container Docker dan melakukan
+operasi data pada tabel `statistik`.
 
 ---
 
@@ -73,8 +73,7 @@ Tunggu beberapa detik sampai MySQL selesai inisialisasi (healthcheck pass).
 docker compose exec python bash
 ```
 
-Sesuai CLAUDE.md ("hanya membuka terminal di dalam container docker"), semua
-pekerjaan dilakukan dari dalam container ini.
+Semua perintah aplikasi dijalankan dari dalam container ini.
 
 ### 3. (Opsional) Tes koneksi MySQL dari dalam container
 
@@ -104,7 +103,7 @@ Pilih [0-3]:
 
 ## Tabel `statistik`
 
-TABEL normal sederhana (sesuai CLAUDE.md aturan database):
+Struktur tabel sederhana:
 
 | Kolom     | Tipe           | Keterangan                  |
 | --------- | -------------- | --------------------------- |
@@ -118,7 +117,7 @@ MySQL pertama kali jalan.
 
 ---
 
-## Cara Menunjukkan Aplikasi (sesuai CLAUDE.md)
+## Cara Menunjukkan Aplikasi
 
 1. **Jalankan stack**: `docker compose up -d`
 2. **Masuk terminal container**: `docker compose exec python bash`
@@ -163,7 +162,7 @@ docker compose down -v
 
 ## Catatan
 
-- Ikuti aturan CLAUDE.md: **tidak menambah fitur di luar kebutuhan bengkel sederhana**.
+- Fokus aplikasi ini adalah latihan CLI sederhana untuk mengelola data `statistik`.
 - Port host sengaja dipilih `3311` agar tidak bentrok dengan stack MySQL lain
   (`3306`, `3310`).
 - Source code di-mount sebagai volume, jadi perubahan file `.py`/`sql` di host
