@@ -26,7 +26,6 @@ Tidak ada web server / nginx di stack ini karena fokus utama adalah terminal di 
 
 ```
 digitalentappython/
-├── CLAUDE.md                  # Instruksi proyek
 ├── Dockerfile                 # Image Python 3.11 + tools
 ├── docker-compose.yml         # 2 service: python + db
 ├── requirements.txt           # mysql-connector-python
